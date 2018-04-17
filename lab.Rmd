@@ -1,0 +1,78 @@
+---
+title: "Bayesian Inference for Discrete Random Variables"
+subtitle: "Statistical Inference II"
+author:
+"Mine Dogucu"
+"Noah Johnson"
+date: "April 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(install.load)
+install_load('tidyverse')
+```
+
+## Conditional Probability
+
+$P(A|B) = \frac{P(A \cap B)}{P(B)} \implies P(A \cap B) = P(A|B) * P(B)$
+
+$P(B|A) = \frac{P(A \cap B)}{P(A)} \implies P(A \cap B) = P(B|A) * P(A)$
+
+## Bayes' Theorem
+
+## Bayesian Universe
+
+## Bayesian Inference by Tables
+
+There is an urn containing a total of 5 balls, some of which are red and the rest of which are green. We don't know how many of the balls are red. Let $\theta$ be the number of red balls in the urn.
+
+### Bayesian universe of the experiment
+
+### Joint and marginal probability distributions
+
+### Finding the posterior probability of $\theta | (Y = 1)$
+
+### The posterior probability distribution after second red observation (no replacement).
+
+## Consider an exam with 4 multiple-choice questions. Each question has 3 options. A student who hasn't studied guesses at each question with a probability of 1/3 of getting it right. Students who have studied might have probabilities 2/3 or 0.95 of getting questions right. Make a table of likelihoods. You may want to use R for this question.
+
+```{r}
+t <- tibble(theta = c(1/3, 2/3, 0.95), prior = rep(1/3, 3))
+
+t$likelihood0 <- dbinom(0, 4, t$theta)
+t$likelihood1 <- dbinom(1, 4, t$theta)
+t$likelihood2 <- dbinom(2, 4, t$theta)
+t$likelihood3 <- dbinom(3, 4, t$theta)
+t$likelihood4 <- dbinom(4, 4, t$theta)
+
+t
+
+```
+
+### You have observed that a student has responded to two questions correctly. What can you conclude about whether they have studied or not?
+
+```{r}
+ptl <- t$prior * t$likelihood2
+marginal <- sum(ptl)
+
+posterior <- ptl / marginal
+posterior
+```
+
+We can't tell whether the student was just guessing or is a medium-strength student (theta = 2/3). But it's unlikely that they are an exceptional student (theta = 0.95).
+
+### In another exam, you observe another student who has answered 50 out of 100 questions correctly. What can you conclude about whether they have studied or not?
+
+```{r}
+lik50 <- dbinom(50, 100, t$theta)
+lik50
+ptl <- t$prior * t$likelihood2
+marginal <- sum(ptl)
+
+posterior <- ptl / marginal
+posterior
+```
+
