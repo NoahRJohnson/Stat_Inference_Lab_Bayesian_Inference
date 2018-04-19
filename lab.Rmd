@@ -2,10 +2,12 @@
 title: "Bayesian Inference for Discrete Random Variables"
 subtitle: "Statistical Inference II"
 author:
-"Mine Dogucu"
-"Noah Johnson"
+- "Mine Dogucu"
+- "Noah Johnson"
 date: "April 17, 2018"
 output: html_document
+header-includes:
+  - \usepackage{amsmath}
 ---
 
 ```{r setup, include=FALSE}
@@ -13,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(install.load)
 install_load('tidyverse')
+install_load('Bolstad')
 ```
 
 ## Conditional Probability
@@ -23,7 +26,43 @@ $P(B|A) = \frac{P(A \cap B)}{P(A)} \implies P(A \cap B) = P(B|A) * P(A)$
 
 ## Bayes' Theorem
 
+$P(B|A) = \frac{P(A|B)P(B)}{P(A)}$
+
+$P(B|A) = \frac{P(A|B)P(B)}{P(A \cap B) + P(A \cap \tilde{B})}$
+
+$P(B|A) = \frac{P(A|B)P(B)}{P(A | B)P(B) + P(A | \tilde{B})P(\tilde{B})}$
+
+More generally, for a partition of $B_1, B_2, \dots, B_M$ of $\Omega$.
+
+$P(B_j|A) = \frac{P(A|B_j)P(B_j)}{\sum_{i=1}^M P(A | B_j)P(B_j)}$
+
 ## Bayesian Universe
+
+Full Universe
+
+$$
+\begin{tabular}{c|c|c}
+& A & \tilde{A} \\
+\hline
+B_1 & &  \\
+\hline
+B_2 & & \\
+\hline
+\end{table}
+$$
+
+Reduced Universe
+
+$$
+\begin{tabular}{c|c}
+& A \\
+\hline
+B_1 & \\
+\hline
+B_2 & \\
+\hline
+\end{tabular}
+$$
 
 ## Bayesian Inference by Tables
 
@@ -31,11 +70,87 @@ There is an urn containing a total of 5 balls, some of which are red and the res
 
 ### Bayesian universe of the experiment
 
-### Joint and marginal probability distributions
+$$
+\begin{tabular}{c|c|c}
+& Y = 0 (pull a green ball) & Y = 1 (pull a red ball) \\
+\hline
+0 red balls in urn & &  \\
+\hline
+1 red balls in urn & & \\
+\hline
+2 red balls in urn & & \\
+\hline
+3 red balls in urn & & \\
+\hline
+4 red balls in urn & & \\
+\hline
+5 red balls in urn & & \\
+\hline
+\end{tabular}
+$$
+
+### Joint and marginal prior distributions
+
+\begin{tabular}{c|c|c|c|c|c}
+\theta_i & \pi(\theta_i) & P(Y = 0 | \theta_i) & P(Y = 1 | \theta_i) & P(Y = 0 \cap \theta_i) & P(Y = 1 \cap \theta_i) \\
+\hline
+0 & 1/6 & 1 & 0 & 5/30 & 0 \\
+\hline
+1 & 1/6 & 4/5 & 1/5 & 4/30 & 1/30 \\
+\hline
+2 & 1/6 & 3/5 & 2/5 & 3/30 & 2/30 \\
+\hline
+3 & 1/6 & 2/5 & 3/5 & 2/30 & 3/30 \\
+\hline
+4 & 1/6 & 1/5 & 4/5 & 1/30 & 4/30 \\
+\hline
+5 & 1/6 & 0 & 5/5 & 0 & 5/30 \\
+\hline
+\end{tabular}
+
+We find the marginal distribution by summing the last two columns.
+
+$P(Y=0) = \frac{1}{2}$
+
+$P(Y=1) = \frac{1}{2}$
 
 ### Finding the posterior probability of $\theta | (Y = 1)$
 
+\begin{tabular}{c|c|c|c|c}
+\theta_i & \pi(\theta_i) & P(Y = 1 | \theta_i) & P(Y = 1 | \theta_i) * \pi(\theta_i) & \pi(\theta_i | Y = 1) \\
+\hline
+0 & 1/6 & 0 & 0 & 0 \\
+\hline
+1 & 1/6 & 1/5 & 1/30 & 1/15 \\
+\hline
+2 & 1/6 & 2/5 & 2/30 & 2/15 \\
+\hline
+3 & 1/6 & 3/5 & 3/30 & 3/15 \\
+\hline
+4 & 1/6 & 4/5 & 4/30 & 4/15 \\
+\hline
+5 & 1/6 & 5/5 & 5/30 & 5/15 \\
+\hline
+\end{tabular}
+
 ### The posterior probability distribution after second red observation (no replacement).
+
+\begin{tabular}{c|c|c|c|c}
+\theta_i & \pi(\theta_i) & P(Y = 1 | \theta_i) & P(Y = 1 | \theta_i) * \pi(\theta_i) & \pi(\theta_i | Y = 1) \\
+\hline
+0 & 0 & 0 & 0 & 0 \\
+\hline
+1 & 1/15 & 0 & 0 & 0 \\
+\hline
+2 & 2/15 & 1/4 & 2/60 & 1/20 \\
+\hline
+3 & 3/15 & 2/4 & 6/30 & 3/20 \\
+\hline
+4 & 4/15 & 3/4 & 12/60 & 6/20 \\
+\hline
+5 & 5/15 & 4/4 & 20/60 & 10/20 \\
+\hline
+\end{tabular}
 
 ## Consider an exam with 4 multiple-choice questions. Each question has 3 options. A student who hasn't studied guesses at each question with a probability of 1/3 of getting it right. Students who have studied might have probabilities 2/3 or 0.95 of getting questions right. Make a table of likelihoods. You may want to use R for this question.
 
@@ -49,30 +164,72 @@ t$likelihood3 <- dbinom(3, 4, t$theta)
 t$likelihood4 <- dbinom(4, 4, t$theta)
 
 t
-
 ```
 
 ### You have observed that a student has responded to two questions correctly. What can you conclude about whether they have studied or not?
 
 ```{r}
-ptl <- t$prior * t$likelihood2
+prior.times.likelihood <- t$prior * t$likelihood2
+marginal <- sum(prior.times.likelihood)
+
+posterior <- prior.times.likelihood / marginal
+posterior
+```
+
+We can't tell whether the student was just guessing or is a medium-strength student (theta = 2/3). But there's only a 2% chance that they are an exceptional student (theta = 0.95).
+
+### In another exam, you observe another student who has answered 50 out of 100 questions correctly. What can you conclude about whether they have studied or not?
+
+```{r}
+lik50 <- dbinom(50, 100, t$theta)
+
+ptl <- t$prior * lik50
 marginal <- sum(ptl)
 
 posterior <- ptl / marginal
 posterior
 ```
 
-We can't tell whether the student was just guessing or is a medium-strength student (theta = 2/3). But it's unlikely that they are an exceptional student (theta = 0.95).
+Once again, even with more observations, because there was an equal number of successes and failures, there is an equal posterior for not having studied, and for having studied a bit. But the probability of being an exceptional student (theta = 0.95) who got this unlucky is even smaller now. Really really small.
 
-### In another exam, you observe another student who has answered 50 out of 100 questions correctly. What can you conclude about whether they have studied or not?
+## Part II
+
+Suppose that a factory makes a large number of cars per day. With some small probability, a car is defective. We are going to visit this factory for a week (N = 7 days) and record the number of defective cars. Assume that the number of defective car $Y_i$ on Day $i$ follows a Poisson distribution with parameter $\lambda$, $Y_i ~ P(\lambda)$, and that the $Y_i$s are independent. After a week we have a sample ${Y_1, Y_2, \dots, Y_N}$. The likelihood of the sample is
+
+$$
+p(y|\lambda) = p(y_1 | \lambda) p(y_2 | \lambda) \dots p(y_N | \lambda) = \prod_{i=1}^N (y_i | \lambda)
+$$
+
+**In real life**, we never know the parameter $\lambda$ but we may have some prior belief about it. For the purposes of this class we will assume on average 1, through 10 cars break and since we do not know much about the car industry we will assume these parameters are equally likely.
+
+**In not-so real life**, we will set the true $\lambda = 3$ and simulate 7 days of data from this true distribution. Simulate this data using R.
 
 ```{r}
-lik50 <- dbinom(50, 100, t$theta)
-lik50
-ptl <- t$prior * t$likelihood2
+set.seed(34243)
+data <- rpois(7, 3)
+```
+
+Now pretend we never knew the true value of $\lambda$ and calculate the posterior distribution for estimating $\lambda$ based on the data we "observed" (i.e. simulated).
+
+```{r}
+t <- tibble(lambda = 1:10, prior = rep(1/10, 10))
+
+likelihood <- rep(1, 10)
+
+likelihood.sapply <- sapply(t$lambda, function(l) return (prod(dpois(data, l))))
+
+for (i in 1:10) {
+  l <- t$lambda[i]
+  likelihood[i] <- prod(dpois(data, l))
+}
+
+ptl <- t$prior * likelihood
 marginal <- sum(ptl)
 
 posterior <- ptl / marginal
 posterior
+
+
+poisdp(data, t$lambda, t$prior)
 ```
 
