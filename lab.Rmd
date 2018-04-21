@@ -5,7 +5,7 @@ author:
 - "Mine Dogucu"
 - "Noah Johnson"
 date: "April 17, 2018"
-output: html_document
+output: pdf_document
 header-includes:
   - \usepackage{amsmath}
 ---
@@ -42,13 +42,13 @@ Full Universe
 
 $$
 \begin{tabular}{c|c|c}
-& A & \tilde{A} \\
+& A & $\tilde{A}$ \\
 \hline
-B_1 & &  \\
+$B_1$ & &  \\
 \hline
-B_2 & & \\
+$B_2$ & & \\
 \hline
-\end{table}
+\end{tabular}
 $$
 
 Reduced Universe
@@ -57,9 +57,9 @@ $$
 \begin{tabular}{c|c}
 & A \\
 \hline
-B_1 & \\
+$B_1$ & \\
 \hline
-B_2 & \\
+$B_2$ & \\
 \hline
 \end{tabular}
 $$
@@ -92,7 +92,7 @@ $$
 ### Joint and marginal prior distributions
 
 \begin{tabular}{c|c|c|c|c|c}
-\theta_i & \pi(\theta_i) & P(Y = 0 | \theta_i) & P(Y = 1 | \theta_i) & P(Y = 0 \cap \theta_i) & P(Y = 1 \cap \theta_i) \\
+$\theta_i$ & $\pi(\theta_i)$ & $P(Y = 0 | \theta_i)$ & $P(Y = 1 | \theta_i)$ & $P(Y = 0 \cap \theta_i)$ & $P(Y = 1 \cap \theta_i)$ \\
 \hline
 0 & 1/6 & 1 & 0 & 5/30 & 0 \\
 \hline
@@ -117,7 +117,7 @@ $P(Y=1) = \frac{1}{2}$
 ### Finding the posterior probability of $\theta | (Y = 1)$
 
 \begin{tabular}{c|c|c|c|c}
-\theta_i & \pi(\theta_i) & P(Y = 1 | \theta_i) & P(Y = 1 | \theta_i) * \pi(\theta_i) & \pi(\theta_i | Y = 1) \\
+$\theta_i$ & $\pi(\theta_i)$ & $P(Y = 1 | \theta_i)$ & $P(Y = 1 | \theta_i) * \pi(\theta_i)$ & $\pi(\theta_i | Y = 1)$ \\
 \hline
 0 & 1/6 & 0 & 0 & 0 \\
 \hline
@@ -136,7 +136,7 @@ $P(Y=1) = \frac{1}{2}$
 ### The posterior probability distribution after second red observation (no replacement).
 
 \begin{tabular}{c|c|c|c|c}
-\theta_i & \pi(\theta_i) & P(Y = 1 | \theta_i) & P(Y = 1 | \theta_i) * \pi(\theta_i) & \pi(\theta_i | Y = 1) \\
+$\theta_i$ & $\pi(\theta_i)$ & $P(Y = 1 | \theta_i)$ & $P(Y = 1 | \theta_i) * \pi(\theta_i)$ & $\pi(\theta_i | Y = 1)$ \\
 \hline
 0 & 0 & 0 & 0 & 0 \\
 \hline
@@ -214,14 +214,7 @@ Now pretend we never knew the true value of $\lambda$ and calculate the posterio
 ```{r}
 t <- tibble(lambda = 1:10, prior = rep(1/10, 10))
 
-likelihood <- rep(1, 10)
-
-likelihood.sapply <- sapply(t$lambda, function(l) return (prod(dpois(data, l))))
-
-for (i in 1:10) {
-  l <- t$lambda[i]
-  likelihood[i] <- prod(dpois(data, l))
-}
+likelihood <- sapply(t$lambda, function(l) return (prod(dpois(data, l))))
 
 ptl <- t$prior * likelihood
 marginal <- sum(ptl)
@@ -233,3 +226,4 @@ posterior
 poisdp(data, t$lambda, t$prior)
 ```
 
+We can see that $\theta = 3$ is most likely given the data, as expected!
